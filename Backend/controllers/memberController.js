@@ -65,8 +65,8 @@ export const memberController = {
   updateMember: async (req, res) => {
     try {
       const { id } = req.params;
+      console.log(id)
       const { mem_name, mem_phone, mem_email } = req.body;
-      
       const member = await prisma.member.update({
         where: { mem_id: parseInt(id) },
         data: {

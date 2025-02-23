@@ -1,50 +1,69 @@
 import prisma from '../config/database.js';
 import { apiResponse } from '../utils/apiResponse.js';
 
+
+
 export const dashboardController = {
-    
   getPendingReturns: async (req, res) => {
     try {
       const { date } = req.query;
       const targetDate = date ? new Date(date) : new Date();
-      
+     
+  
       const pendingReturns = await prisma.issuance.findMany({
         where: {
           target_return_date: {
-            lte: targetDate
+            equals: targetDate
           },
-          issuance_status: 'BORROWED'
         },
-        include: {
-          Member: {
+        select: {
+          issuance_date: true,
+          target_return_date: true,
+          member: {
             select: {
-              mem_name: true,
-              mem_phone: true,
-              mem_email: true
+              mem_name: true
             }
           },
-          Book: {
+          book: {
             select: {
               book_name: true,
-              book_publisher: true
+              book_publisher: true,
+              collection: {
+                select: {
+                  collection_name: true
+                }
+              },
+              category: {
+                select: {
+                  cat_name: true
+                }
+              }
             }
           }
         }
       });
-      
+
+    
+  
       const formattedResponse = pendingReturns.map(issue => ({
-        member_name: issue.Member.mem_name,
-        member_contact: {
-          phone: issue.Member.mem_phone,
-          email: issue.Member.mem_email
+        issuance_details: {
+          issuance_date: issue.issuance_date,
+          target_return_date: issue.target_return_date,
+          days_overdue: Math.floor((targetDate - new Date(issue.target_return_date)) / (1000 * 60 * 60 * 24))
         },
-        book_details: {
-          name: issue.Book.book_name,
-          publisher: issue.Book.book_publisher
+        member: {
+          name: issue.member.mem_name
         },
-        issuance_date: issue.issuance_date,
-        target_return_date: issue.target_return_date,
-        days_overdue: Math.floor((targetDate - new Date(issue.target_return_date)) / (1000 * 60 * 60 * 24))
+        book: {
+          name: issue.book.book_name,
+          publisher: issue.book.book_publisher
+        },
+        collection: {
+          name: issue.book.collection.collection_name
+        },
+        category: {
+          name: issue.book.category.cat_name
+        }
       }));
       
       return apiResponse.success(res, formattedResponse);
@@ -53,4 +72,3 @@ export const dashboardController = {
     }
   }
 };
-

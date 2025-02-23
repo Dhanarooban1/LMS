@@ -12,7 +12,7 @@ export const generateToken = (adminId) =>
 
 export const verifyAdminToken = (req, res, next) => {
   const token = req.headers['authorization'];
-  console.log(token)
+  
   if (!token) {
     return res.status(401).json({ error: 'No Token' });
   }

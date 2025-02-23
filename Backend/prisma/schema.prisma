@@ -18,58 +18,62 @@ model Admin {
   password    String
 }
 
-
-// This is your Prisma schema file for a library management system
-
-model Collection {
-  collection_id   Int      @id @default(autoincrement())
-  collection_name String   
-  books          Book[]
+model Membership {
+  membership_id Int    @id @default(autoincrement())
+  member_id     Int    @unique
+  status        String
+  Member        Member @relation(fields: [member_id], references: [mem_id])
 }
 
-model Book {
-  book_id           Int        @id @default(autoincrement())
-  book_name         String     
-  book_cat_id       Int        // Changed from String to Int to match cat_id
-  book_collection_id Int       // Changed from String to Int to match collection_id
-  book_launch_date  DateTime
-  book_publisher    String
-  collection        Collection @relation(fields: [book_collection_id], references: [collection_id])
-  category          Category   @relation(fields: [book_cat_id], references: [cat_id])
-  issuances         Issuance[]
-}
-
-model Category {
-  cat_id       Int      @id @default(autoincrement())
-  cat_name     String
-  sub_cat_name String?
-  books        Book[]
-}
 
 model Member {
-  mem_id      Int           @id @default(autoincrement())
-  mem_name    String
-  mem_phone   String
-  mem_email   String
-  memberships Membership[]
-  issuances   Issuance[]
+  mem_id    Int     @id @default(autoincrement())
+  mem_name  String
+  mem_phone String?
+  mem_email String?
+
+  Membership Membership?
+  Issuances  Issuance[]
 }
 
-model Membership {
-  membership_id Int      @id @default(autoincrement())
-  member_id    Int
-  status       String
-  member       Member    @relation(fields: [member_id], references: [mem_id])
-}
 
 model Issuance {
   issuance_id       Int      @id @default(autoincrement())
-  book_id          Int
-  issuance_date    DateTime
-  issuance_member  Int
-  issued_by        String
-  target_return_date DateTime
-  issuance_status   String
-  book             Book     @relation(fields: [book_id], references: [book_id])
-  member           Member   @relation(fields: [issuance_member], references: [mem_id])
+  book_id           Int
+  issuance_date     DateTime
+  issuance_member   Int
+  issued_by         String?
+  target_return_date DateTime?
+  issuance_status   String?
+
+  Book   Book   @relation(fields: [book_id], references: [book_id])
+  Member Member @relation(fields: [issuance_member], references: [mem_id])
+}
+
+
+model Book {
+  book_id            Int       @id @default(autoincrement())
+  book_name          String
+  book_cat_id        Int?
+  book_collection_id Int?
+  book_launch_date   DateTime?
+  book_publisher     String?
+
+  Issuances  Issuance[]
+  Category   Category?   @relation(fields: [book_cat_id], references: [cat_id])
+  Collection Collection? @relation(fields: [book_collection_id], references: [collection_id])
+}
+
+model Collection {
+  collection_id   Int    @id @default(autoincrement())
+  collection_name String
+  Books           Book[]
+}
+
+model Category {
+  cat_id       Int    @id @default(autoincrement())
+  cat_name     String
+  sub_cat_name String?
+
+  Books Book[]
 }
