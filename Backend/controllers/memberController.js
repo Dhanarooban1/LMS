@@ -7,8 +7,8 @@ export const memberController = {
     try {
       const members = await prisma.member.findMany({
         include: {
-          Membership: true,
-          Issuances: true
+          memberships: true,
+          issuances: true
         }
       });
       return apiResponse.success(res, members);
@@ -51,7 +51,7 @@ export const memberController = {
           mem_email,
         },
         include: {
-          Membership: true
+          memberships : true
         }
       });
       
@@ -75,7 +75,7 @@ export const memberController = {
           mem_email,
         },
         include: {
-          Membership: true
+          memberships : true
         }
       });
       
