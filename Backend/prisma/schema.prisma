@@ -1,0 +1,79 @@
+// This is your Prisma schema file
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Admin {
+  admin_id    Int    @id @default(autoincrement())
+  admin_name  String
+  admin_email String @unique
+  password    String
+}
+
+model Membership {
+  membership_id Int    @id @default(autoincrement())
+  member_id     Int    @unique
+  status        String
+  Member        Member @relation(fields: [member_id], references: [mem_id])
+}
+
+
+model Member {
+  mem_id    Int     @id @default(autoincrement())
+  mem_name  String
+  mem_phone String?
+  mem_email String?
+
+  Membership Membership?
+  Issuances  Issuance[]
+}
+
+
+model Issuance {
+  issuance_id       Int      @id @default(autoincrement())
+  book_id           Int
+  issuance_date     DateTime
+  issuance_member   Int
+  issued_by         String?
+  target_return_date DateTime?
+  issuance_status   String?
+
+  Book   Book   @relation(fields: [book_id], references: [book_id])
+  Member Member @relation(fields: [issuance_member], references: [mem_id])
+}
+
+
+model Book {
+  book_id            Int       @id @default(autoincrement())
+  book_name          String
+  book_cat_id        Int?
+  book_collection_id Int?
+  book_launch_date   DateTime?
+  book_publisher     String?
+
+  Issuances  Issuance[]
+  Category   Category?   @relation(fields: [book_cat_id], references: [cat_id])
+  Collection Collection? @relation(fields: [book_collection_id], references: [collection_id])
+}
+
+model Collection {
+  collection_id   Int    @id @default(autoincrement())
+  collection_name String
+  Books           Book[]
+}
+
+model Category {
+  cat_id       Int    @id @default(autoincrement())
+  cat_name     String
+  sub_cat_name String?
+
+  Books Book[]
+}
