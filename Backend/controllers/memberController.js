@@ -24,8 +24,8 @@ export const memberController = {
       const member = await prisma.member.findUnique({
         where: { mem_id: parseInt(id) },
         include: {
-          Membership: true,
-          Issuances: true
+          memberships : true,
+          issuances : true  
         }
       });
       
@@ -42,18 +42,13 @@ export const memberController = {
   // Create new member
   createMember: async (req, res) => {
     try {
-      const { mem_name, mem_phone, mem_email, membership_status } = req.body;
+      const { mem_name, mem_phone, mem_email } = req.body;
       
       const member = await prisma.member.create({
         data: {
           mem_name,
           mem_phone,
           mem_email,
-          Membership: {
-            create: {
-              status: membership_status
-            }
-          }
         },
         include: {
           Membership: true
@@ -70,7 +65,7 @@ export const memberController = {
   updateMember: async (req, res) => {
     try {
       const { id } = req.params;
-      const { mem_name, mem_phone, mem_email, membership_status } = req.body;
+      const { mem_name, mem_phone, mem_email } = req.body;
       
       const member = await prisma.member.update({
         where: { mem_id: parseInt(id) },
@@ -78,11 +73,6 @@ export const memberController = {
           mem_name,
           mem_phone,
           mem_email,
-          Membership: {
-            update: {
-              status: membership_status
-            }
-          }
         },
         include: {
           Membership: true

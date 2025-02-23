@@ -6,6 +6,7 @@ export const apiResponse = {
         data
       });
     },
+    
     error: (res, message = 'Error', status = 500) => {
       return res.status(status).json({
         success: false,
