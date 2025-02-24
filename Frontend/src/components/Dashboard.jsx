@@ -1,27 +1,56 @@
 import { useState, useEffect } from 'react';
 import { Calendar, Library, Clock, User, Book } from 'lucide-react';
 
-export default function Dashboard({pendingReturns, fetchData}) {
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [currentMonth, setCurrentMonth] = useState(new Date());
+export default function Dashboard({ pendingReturns, fetchData }) {
+  // Initialize both states with the same date object
+  const today = new Date();
+  const [selectedDate, setSelectedDate] = useState(today);
+  const [currentMonth, setCurrentMonth] = useState(today);
 
   useEffect(() => {
-    fetchData(selectedDate.toISOString().split('T')[0]); // Fetch data whenever date changes
+   
+    const dateString = selectedDate.toLocaleDateString('en-CA');
+    fetchData(dateString);
+    console.log(dateString)
   }, [selectedDate]);
- 
+  
+
   const getDaysInMonth = (date) => {
     const year = date.getFullYear();
     const month = date.getMonth();
     const days = new Date(year, month + 1, 0).getDate();
-    return Array.from({ length: days }, (_, i) => new Date(year, month, i + 1));
+    return Array.from({ length: days }, (_, i) => {
+      // Create date with correct year and month context
+      return new Date(year, month, i + 1);
+    });
   };
 
   const days = getDaysInMonth(currentMonth);
 
-
-
   const isSelectedDate = (date) => {
-    return date.toDateString() === selectedDate.toDateString();
+    return date.getFullYear() === selectedDate.getFullYear() &&
+           date.getMonth() === selectedDate.getMonth() &&
+           date.getDate() === selectedDate.getDate();
+  };
+
+  const handlePreviousMonth = () => {
+    setCurrentMonth(prev => {
+      const newDate = new Date(prev.getFullYear(), prev.getMonth() - 1, 1);
+      return newDate;
+    });
+  };
+
+  const handleNextMonth = () => {
+    setCurrentMonth(prev => {
+      const newDate = new Date(prev.getFullYear(), prev.getMonth() + 1, 1);
+      return newDate;
+    });
+  };
+
+  const handleDateClick = (date) => {
+    // Set both selected date and current month to maintain sync
+    setSelectedDate(date);
+    setCurrentMonth(new Date(date.getFullYear(), date.getMonth(), 1));
   };
 
   return (
@@ -37,16 +66,19 @@ export default function Dashboard({pendingReturns, fetchData}) {
           <div className="bg-gray-50 p-4 rounded-lg">
             <div className="flex items-center justify-between mb-4">
               <button
-                onClick={() => setCurrentMonth(new Date(currentMonth.setMonth(currentMonth.getMonth() - 1)))}
+                onClick={handlePreviousMonth}
                 className="p-2 hover:bg-gray-200 rounded-full"
               >
                 ←
               </button>
               <span className="font-semibold">
-                {currentMonth.toLocaleString('default', { month: 'long', year: 'numeric' })}
+                {currentMonth.toLocaleString('default', { 
+                  month: 'long',
+                  year: 'numeric'
+                })}
               </span>
               <button
-                onClick={() => setCurrentMonth(new Date(currentMonth.setMonth(currentMonth.getMonth() + 1)))}
+                onClick={handleNextMonth}
                 className="p-2 hover:bg-gray-200 rounded-full"
               >
                 →
@@ -66,7 +98,7 @@ export default function Dashboard({pendingReturns, fetchData}) {
               {days.map((date) => (
                 <button
                   key={date.toString()}
-                  onClick={() => setSelectedDate(date)}
+                  onClick={() => handleDateClick(date)}
                   className={`p-2 text-sm rounded-full ${
                     isSelectedDate(date)
                       ? 'bg-blue-500 text-white'
@@ -147,7 +179,7 @@ export default function Dashboard({pendingReturns, fetchData}) {
                 ))}
                 {pendingReturns.length === 0 && (
                   <tr>
-                    <td colSpan="5" className="px-6 py-4 text-center text-sm text-gray-500">
+                    <td colSpan="7" className="px-6 py-4 text-center text-sm text-gray-500">
                       No pending returns for selected date
                     </td>
                   </tr>
