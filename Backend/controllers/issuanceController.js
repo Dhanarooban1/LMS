@@ -7,7 +7,7 @@ export const issuanceController = {
     try {
       const issuances = await prisma.issuance.findMany({
         include: {
-          Member: true,
+          issuance_member: true,
           Book: true
         }
       });

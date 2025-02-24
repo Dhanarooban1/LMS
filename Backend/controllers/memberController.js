@@ -21,6 +21,7 @@ export const memberController = {
   getMemberById: async (req, res) => {
     try {
       const { id } = req.params;
+
       const member = await prisma.member.findUnique({
         where: { mem_id: parseInt(id) },
         include: {

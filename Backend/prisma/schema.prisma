@@ -1,79 +1,88 @@
-// This is your Prisma schema file
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
+// -------------------------------------
+// 1. Prisma Generator & Datasource
+// -------------------------------------
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+   provider = "postgresql"
+ url      = env("DATABASE_URL")
+ directUrl = env("DIRECT_URL")
 }
+
+// -------------------------------------
+// 2. Models (Mirroring Your ERD)
+// -------------------------------------
 
 model Admin {
-  admin_id    Int    @id @default(autoincrement())
-  admin_name  String
-  admin_email String @unique
-  password    String
+  admin_id   String @id
+  admin_name String
+  admin_email String
+  password   String
 }
-
-model Membership {
-  membership_id Int    @id @default(autoincrement())
-  member_id     Int    @unique
-  status        String
-  Member        Member @relation(fields: [member_id], references: [mem_id])
-}
-
 
 model Member {
-  mem_id    Int     @id @default(autoincrement())
+  mem_id    String @id
   mem_name  String
   mem_phone String?
   mem_email String?
 
-  Membership Membership?
-  Issuances  Issuance[]
+  memberships Membership[]
+  issuances   Issuance[]
 }
 
+model Membership {
+  membership_id String @id
+  member_id     String
+  status        String
+
+  // Relation: membership -> member
+  member Member @relation(fields: [member_id], references: [mem_id])
+}
 
 model Issuance {
-  issuance_id       Int      @id @default(autoincrement())
-  book_id           Int
+  issuance_id       String  @id
+  book_id           String
   issuance_date     DateTime
-  issuance_member   Int
+  issuance_member   String
   issued_by         String?
   target_return_date DateTime?
   issuance_status   String?
 
-  Book   Book   @relation(fields: [book_id], references: [book_id])
-  Member Member @relation(fields: [issuance_member], references: [mem_id])
+  // Relations: issuance -> book, issuance -> member
+  book   Book   @relation(fields: [book_id], references: [book_id])
+  member Member @relation(fields: [issuance_member], references: [mem_id])
 }
 
-
 model Book {
-  book_id            Int       @id @default(autoincrement())
+  book_id            String @id
   book_name          String
-  book_cat_id        Int?
-  book_collection_id Int?
+  book_cat_id        String?
+  book_collection_id String?
   book_launch_date   DateTime?
   book_publisher     String?
 
-  Issuances  Issuance[]
-  Category   Category?   @relation(fields: [book_cat_id], references: [cat_id])
-  Collection Collection? @relation(fields: [book_collection_id], references: [collection_id])
+  // Relations: book -> category, book -> collection
+  category   Category?   @relation(fields: [book_cat_id], references: [cat_id])
+  collection Collection? @relation(fields: [book_collection_id], references: [collection_id])
+
+  issuances  Issuance[]
 }
 
 model Collection {
-  collection_id   Int    @id @default(autoincrement())
+  collection_id   String @id
   collection_name String
-  Books           Book[]
+
+  // Relation: collection -> books
+  books Book[]
 }
 
 model Category {
-  cat_id       Int    @id @default(autoincrement())
-  cat_name     String
+  cat_id      String @id
+  cat_name    String
   sub_cat_name String?
 
-  Books Book[]
+  // Relation: category -> books
+  books Book[]
 }
