@@ -1,52 +1,5 @@
 
 
-1. Build CRUD RESTful APIs (JSON payload) for the following entities/processes
-a. Member
-b. Book
-c. Issuance
-
-
-1. Build UI for a simple dashboard showing which members have books pending for return
-on a given day.
-
-
-
-
-2. APIs should have some security mechanism built in to prevent unauthorized calls (API
-Key etc)
-
-
-4. API should follow a standard . For eg. the API endpoint should be something like :
-myapplication.abc.com/<entity name >/<entity id>
-
-5. GET libmgmt.abc.com/book/1 should return the details of book with id =1 
- API should support standard CRUD Methods (PUT, POST, GET)
-
-
-6. Write a query to get all books that have never been borrowed 
-Book Name Author
-
-7. Write a query that can list the outstanding books at any given point in time
-Member
-Name
-Book Name Issued Date Target
-Return
-Date
-Autho
-
-Write a query to extract the top 10 most borrowed books
-Book Name # of times
-borrowed
-# of
-Members
-that
-borrowed
-
-
-
-
-
-
 
 
 
