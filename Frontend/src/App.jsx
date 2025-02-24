@@ -1,23 +1,30 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
-import { useState, useEffect } from 'react'
-import Dashboard from './components/Dashboard'
-import Books from './components/Books'
-import Members from './components/Members'
-import Issuance from './components/Issuance'
-import Login from './components/Login'
-import Layout from './components/Layout'
-import axios from 'axios'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import Dashboard from './components/Dashboard';
+import Books from './components/Books';
+import Members from './components/Members';
+import Issuance from './components/Issuance';
+import AdminSignup from './components/AdminSignup';
+import Layout from './components/Layout';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import BASE_URL from '../Config';
 
 function App() {
-
   const [pendingReturns, setPendingReturns] = useState([]);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const token = Cookies.get('authToken');
+    setIsAuthenticated(!!token);
+  }, []);
 
   const fetchData = async (date) => {
     try {
-      const response = await axios.get(`http://localhost:8998/api/dashboard/pending-returns?date=${date}`, {
-        headers: {
-          'authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxLCJpYXQiOjE3NDAzMTY5NTcsImV4cCI6MTc0MjkwODk1N30.Q4fZ8oqzdTj5jdVSa94L1krYaX2qYT0xLf3d_SMnYLQ'
-        }
+      const token = Cookies.get('authToken');
+      
+      const response = await axios.get(`${BASE_URL}/api/dashboard/pending-returns?date=${date}`, {
+        headers: { authorization: `Bearer ${token}` },
       });
       setPendingReturns(response.data.data);
     } catch (error) {
@@ -27,17 +34,52 @@ function App() {
 
   return (
     <Router>
-      <Layout>
-        <Routes>
-        <Route path="/dashboard" element={<Dashboard pendingReturns={pendingReturns} fetchData={fetchData} />} />
-          <Route path="/books" element={<Books />} />
-          <Route path="/members" element={<Members />} />
-          <Route path="/issuance" element={<Issuance />} />
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
-        </Routes>
-      </Layout>
+      <Routes>
+        {isAuthenticated ? (
+          <>
+            <Route
+              path="/dashboard"
+              element={
+                <Layout>
+                  <Dashboard pendingReturns={pendingReturns} fetchData={fetchData} />
+                </Layout>
+              }
+            />
+            <Route
+              path="/books"
+              element={
+                <Layout>
+                  <Books />
+                </Layout>
+              }
+            />
+            <Route
+              path="/members"
+              element={
+                <Layout>
+                  <Members />
+                </Layout>
+              }
+            />
+            <Route
+              path="/issuance"
+              element={
+                <Layout>
+                  <Issuance />
+                </Layout>
+              }
+            />
+            <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          </>
+        ) : (
+          <>
+            <Route path="/signupadmin" element={<AdminSignup />} />
+            <Route path="*" element={<Navigate to="/signupadmin" replace />} />
+          </>
+        )}
+      </Routes>
     </Router>
-  )
+  );
 }
 
-export default App
+export default App;

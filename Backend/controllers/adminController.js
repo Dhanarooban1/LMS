@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 
 export const signupAdmin = async (req, res) => {
     const { admin_name, admin_email, password } = req.body;
-  
+   
     try {
       const existingAdmin = await prisma.admin.findUnique({
         where: { admin_email },
