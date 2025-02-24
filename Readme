@@ -1,0 +1,58 @@
+# 📚 Library Management System
+
+## 🚀 Project Overview
+This is a **Library Management System** designed to efficiently manage books, members, and transactions. The project uses modern web technologies to ensure a fast, scalable, and user-friendly experience.
+
+## 🏗️ Tech Stack
+- **Backend**: Prisma, Supabase, PostgreSQL
+- **Frontend**: React, Tailwind CSS
+
+## 🌟 Features
+- Add, edit, 
+- Manage member details
+- Record book borrow and return transactions
+- Search functionality for books and members
+- Responsive UI for seamless experience across devices
+
+## 🔧 Installation
+
+1. **Clone the repository:**
+```bash
+git clone <repository-url>
+cd library-management-system
+```
+
+2. **Install dependencies:**
+```bash
+# Install backend dependencies
+cd backend
+npm install
+
+# Install frontend dependencies
+cd ../frontend
+npm install
+```
+
+3. **Setup environment variables:**
+- Create a `.env` file in the backend directory.
+- Add the following variables:
+```plaintext
+DATABASE_URL=your_supabase_postgres_url
+```
+
+4. **Run the development server:**
+```bash
+# Start backend
+cd backend
+npm run dev
+
+# Start frontend
+cd ../frontend
+npm start
+```
+
+## 📄 Usage
+- Visit `http://localhost:5173` to access the frontend.
+- The backend runs on `http://localhost:8998`.
+
+

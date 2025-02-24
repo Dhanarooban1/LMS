@@ -20,7 +20,6 @@ export default function Dashboard({ pendingReturns, fetchData }) {
     const month = date.getMonth();
     const days = new Date(year, month + 1, 0).getDate();
     return Array.from({ length: days }, (_, i) => {
-      // Create date with correct year and month context
       return new Date(year, month, i + 1);
     });
   };
@@ -48,7 +47,7 @@ export default function Dashboard({ pendingReturns, fetchData }) {
   };
 
   const handleDateClick = (date) => {
-    // Set both selected date and current month to maintain sync
+    
     setSelectedDate(date);
     setCurrentMonth(new Date(date.getFullYear(), date.getMonth(), 1));
   };
