@@ -24,7 +24,7 @@ function App() {
       const token = Cookies.get('authToken');
       
       const response = await axios.get(`${BASE_URL}/api/dashboard/pending-returns?date=${date}`, {
-        headers: { authorization: `Bearer ${token}` },
+        headers: { authorization: token },
       });
       setPendingReturns(response.data.data);
     } catch (error) {
