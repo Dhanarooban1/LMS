@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Search, UserPlus, Mail, Phone, X } from 'lucide-react';
 import axios from 'axios';
-
+import BASE_URL from '../../Config';
+import Cookies from 'js-cookie';
 // Extract the modal into its own component.
 const EditModal = ({ editingMember, setEditingMember, handleUpdate, onClose }) => {
   return (
@@ -80,21 +81,21 @@ const Member = () => {
   const [editingMember, setEditingMember] = useState(null);
 
   useEffect(() => {
-    axios
-      .get('http://localhost:8998/api/members', {
-        headers: {
-          'authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxLCJpYXQiOjE3NDAzMTY5NTcsImV4cCI6MTc0MjkwODk1N30.Q4fZ8oqzdTj5jdVSa94L1krYaX2qYT0xLf3d_SMnYLQ'
-        }
-      })
-      .then(response => {
-        setMembers(response.data.data || []);
-      })
-      .catch(error => {
-        console.error('Error fetching members:', error);
-        setError('Failed to load members');
-      })
-      .finally(() => setLoading(false));
+    const token = Cookies.get('authToken');
+  
+    axios.get(`${BASE_URL}/api/members`, {
+      headers: { authorization: token }
+    })
+    .then(response => {
+      setMembers(response.data.data || []);
+    })
+    .catch(error => {
+      console.error('Error fetching members:', error);
+      setError('Failed to load members');
+    })
+    .finally(() => setLoading(false));
   }, []);
+  
 
   // Filter members based on the search term.
   const filteredMembers = members.filter(member =>
