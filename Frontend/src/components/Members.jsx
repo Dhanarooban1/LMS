@@ -116,7 +116,7 @@ const Member = () => {
     const token = Cookies.get('authToken');
     axios
       .put(
-        `${BASE_URL}/api/members`,
+        `${BASE_URL}/api/members/${editingMember.mem_id}`,
         editingMember, // Send the updated member data here.
         {
           headers: { authorization: token }
