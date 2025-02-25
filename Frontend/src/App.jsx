@@ -69,7 +69,6 @@ function App() {
                 </Layout>
               }
             />
-            <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </>
         ) : (
           <>
