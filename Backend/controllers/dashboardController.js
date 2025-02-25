@@ -21,7 +21,7 @@ export const dashboardController = {
         select: {
           issuance_date: true,
           target_return_date: true,
-          member: {
+          issuance_member: {
             select: {
               mem_name: true
             }
