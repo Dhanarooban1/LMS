@@ -54,7 +54,7 @@ const AdminSignup = () => {
       <div className="absolute h-screen w-[40%] flex flex-col items-center justify-center">
         <img
           className="w-[140px] h-[140px] rounded-full border-[3px] border-red-600 object-cover"
-          src="../src/assets/Neil-Gaiman.png"
+          src="Neil-Gaiman.png"
           alt="Neil Gaiman"
         />
         <p className="text-center mt-6 text-red-600 font-mono text-[22px] tracking-wide">
