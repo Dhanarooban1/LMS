@@ -1,27 +1,21 @@
 import prisma from '../config/database.js';
 import { apiResponse } from '../utils/apiResponse.js';
 
-
-
 export const dashboardController = {
   getPendingReturns: async (req, res) => {
     try {
       const { date } = req.query;
- 
-
      const targetDate = date ? new Date(date) : new Date();
-    
- 
       const pendingReturns = await prisma.issuance.findMany({
         where: {
-          member: {
+          target_return_date: {
             equals: targetDate
           },
         },
         select: {
           issuance_date: true,
           target_return_date: true,
-          issuance_member: {
+          member: {
             select: {
               mem_name: true
             }
@@ -146,6 +140,7 @@ export const dashboardController = {
     
   
       const formattedResponse = pendingReturns.map(issue => ({
+      
         issuance_details: {
           issuance_date: issue.issuance_date,
           target_return_date: issue.target_return_date,
@@ -165,7 +160,6 @@ export const dashboardController = {
           name: issue.book.category.cat_name
         }
       }));
-      
       return apiResponse.success(res, formattedResponse);
     } catch (error) {
       return apiResponse.error(res, error.message);

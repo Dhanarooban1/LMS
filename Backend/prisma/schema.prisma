@@ -1,4 +1,6 @@
-
+// -------------------------------------
+// 1. Prisma Generator & Datasource
+// -------------------------------------
 generator client {
   provider = "prisma-client-js"
 }
@@ -48,7 +50,8 @@ model Issuance {
   issued_by         Int?
   target_return_date DateTime?
   issuance_status   String?
-  
+
+  // Relations: issuance -> book, issuance -> member
   book   Book   @relation(fields: [book_id], references: [book_id])
   member Member @relation(fields: [issuance_member], references: [mem_id])
 }
