@@ -128,13 +128,13 @@ const Member = () => {
         setMembers(members.map(member =>
           member.mem_id === editingMember.mem_id ? editingMember : member
         ));
+        alert('Member updated successfully!');
       })
       .catch(error => {
         alert(`Error updating member: ${error.message}`);
       })
       .finally(() => {
         setIsEditModalOpen(false);
-        alert('Member updated successfully!');
         setEditingMember(null);
       });
   };

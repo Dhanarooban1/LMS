@@ -13,6 +13,7 @@ export const memberController = {
       });
       return apiResponse.success(res, members);
     } catch (error) {
+      console.log(error)
       return apiResponse.error(res, error.message);
     }
   },
