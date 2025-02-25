@@ -19,7 +19,7 @@ export const verifyAdminToken = (req, res, next) => {
   try {
     req.admin = jwt.verify(token, process.env.JWT_SECRET_KEY);
     next();
-    console.log(token)
+   
   } catch (error) {
     res.status(403).json({ error: 'Invalid token' });
   }

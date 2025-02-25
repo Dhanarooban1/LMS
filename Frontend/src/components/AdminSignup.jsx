@@ -23,7 +23,7 @@ const AdminSignup = () => {
     }
    
     try {
-      console.log(BASE_URL)
+    
       const response = await axios.post(`${BASE_URL}/api/admin/signup`, {
         admin_name: adminName,
         admin_email: adminEmail,

@@ -11,7 +11,6 @@ export default function Dashboard({ pendingReturns, fetchData }) {
    
     const dateString = selectedDate.toLocaleDateString('en-CA');
     fetchData(dateString);
-    console.log(dateString)
   }, [selectedDate]);
   
 

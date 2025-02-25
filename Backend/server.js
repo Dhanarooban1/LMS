@@ -27,8 +27,6 @@ app.use(limiter);
 
 
 app.get("/", async (req, res) => {
-    const collection = await prisma.book.findMany();
-    console.log({collection});
     res.status(200).send({ message: "Hello World!!!" });
 })
 

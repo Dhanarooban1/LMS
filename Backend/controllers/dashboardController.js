@@ -8,13 +8,10 @@ export const dashboardController = {
     try {
       const { date } = req.query;
  
-     console.log("fromuser",date)
- 
 
      const targetDate = date ? new Date(date) : new Date();
     
  
-      console.log("targetTime",targetDate)
       const pendingReturns = await prisma.issuance.findMany({
         where: {
           target_return_date: {
