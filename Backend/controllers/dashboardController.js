@@ -14,7 +14,7 @@ export const dashboardController = {
  
       const pendingReturns = await prisma.issuance.findMany({
         where: {
-          target_return_date: {
+          member: {
             equals: targetDate
           },
         },
