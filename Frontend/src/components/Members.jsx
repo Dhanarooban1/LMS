@@ -3,14 +3,14 @@ import { Search, UserPlus, Mail, Phone, X } from 'lucide-react';
 import axios from 'axios';
 import BASE_URL from '../../Config';
 import Cookies from 'js-cookie';
-// Extract the modal into its own component.
+
 const EditModal = ({ editingMember, setEditingMember, handleUpdate, onClose }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
         <div className="mb-4 flex items-center justify-between">
           <h3 className="text-lg font-bold">Edit Member</h3>
-          <button 
+          <button
             onClick={onClose}
             className="rounded-full p-1 hover:bg-gray-100"
           >
@@ -82,20 +82,20 @@ const Member = () => {
 
   useEffect(() => {
     const token = Cookies.get('authToken');
-  
+
     axios.get(`${BASE_URL}/api/members`, {
       headers: { authorization: token }
     })
-    .then(response => {
-      setMembers(response.data.data || []);
-    })
-    .catch(error => {
-      console.error('Error fetching members:', error);
-      setError('Failed to load members');
-    })
-    .finally(() => setLoading(false));
+      .then(response => {
+        setMembers(response.data.data || []);
+      })
+      .catch(error => {
+        console.error('Error fetching members:', error);
+        setError('Failed to load members');
+      })
+      .finally(() => setLoading(false));
   }, []);
-  
+
 
   // Filter members based on the search term.
   const filteredMembers = members.filter(member =>
@@ -113,16 +113,17 @@ const Member = () => {
   // Now include the updated member data in the PUT request.
   const handleUpdate = (e) => {
     e.preventDefault();
+    const token = Cookies.get('authToken');
     axios
       .put(
-      `${BASE_URL}/api/members`,
+        `${BASE_URL}/api/members`,
         editingMember, // Send the updated member data here.
         {
           headers: { authorization: token }
         }
       )
       .then(response => {
-       
+        // Optionally update the local members state
         setMembers(members.map(member =>
           member.mem_id === editingMember.mem_id ? editingMember : member
         ));
@@ -215,7 +216,7 @@ const Member = () => {
                     </div>
                   </td>
                   <td className="px-6 py-4 text-center">
-                    <button 
+                    <button
                       onClick={() => handleEdit(member)}
                       className="text-sm font-medium text-blue-600 hover:text-blue-800"
                     >
@@ -229,10 +230,10 @@ const Member = () => {
         </div>
       </div>
       {isEditModalOpen && editingMember && (
-        <EditModal 
-          editingMember={editingMember} 
-          setEditingMember={setEditingMember} 
-          handleUpdate={handleUpdate} 
+        <EditModal
+          editingMember={editingMember}
+          setEditingMember={setEditingMember}
+          handleUpdate={handleUpdate}
           onClose={() => {
             setIsEditModalOpen(false);
             setEditingMember(null);
