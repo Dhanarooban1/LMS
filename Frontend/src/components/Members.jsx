@@ -115,16 +115,14 @@ const Member = () => {
     e.preventDefault();
     axios
       .put(
-        `http://localhost:8998/api/members/${editingMember.mem_id}`,
+      `${BASE_URL}/api/members`,
         editingMember, // Send the updated member data here.
         {
-          headers: {
-            'authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoxLCJpYXQiOjE3NDAzMTY5NTcsImV4cCI6MTc0MjkwODk1N30.Q4fZ8oqzdTj5jdVSa94L1krYaX2qYT0xLf3d_SMnYLQ'
-          }
+          headers: { authorization: token }
         }
       )
       .then(response => {
-        // Optionally update the local members state
+       
         setMembers(members.map(member =>
           member.mem_id === editingMember.mem_id ? editingMember : member
         ));
