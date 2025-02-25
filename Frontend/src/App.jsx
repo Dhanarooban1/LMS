@@ -72,8 +72,8 @@ function App() {
           </>
         ) : (
           <>
-            <Route path="/signupadmin" element={<AdminSignup />} />
-            <Route path="*" element={<Navigate to="/signupadmin" replace />} />
+            <Route path="/" element={<AdminSignup />} />
+            {/* <Route path="/" element={<Navigate to="/dashboard" replace />} /> */}
           </>
         )}
       </Routes>
