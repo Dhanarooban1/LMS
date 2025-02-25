@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
-
-const BASE_URL = "https://lms-l20t.onrender.com/api";
+import BASE_URL from '../../Config';
 
 const AdminSignup = () => {
   const [showPopup, setShowPopup] = useState(false);
@@ -22,9 +21,10 @@ const AdminSignup = () => {
       setErrorMessage("Please enter a valid email address.");
       return;
     }
-
+   
     try {
-      const response = await axios.post(`${BASE_URL}/admin/signup`, {
+      console.log(BASE_URL)
+      const response = await axios.post(`${BASE_URL}/api/admin/signup`, {
         admin_name: adminName,
         admin_email: adminEmail,
         password: adminPassword,

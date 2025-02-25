@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 
 export const signupAdmin = async (req, res) => {
     const { admin_name, admin_email, password } = req.body;
-   
+  
     try {
       const existingAdmin = await prisma.admin.findUnique({
         where: { admin_email },
@@ -33,9 +33,9 @@ export const signupAdmin = async (req, res) => {
 export const loginAdmin = async (req, res) => {
   const { admin_email, password } = req.body;
 
+  
   try {
     const admin = await prisma.admin.findUnique({ where: { admin_email } });
-    console.log(admin)
     if (!admin || !(await bcrypt.compare(password, admin.password))) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
